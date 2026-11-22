@@ -1,0 +1,16 @@
+{
+  "name": "Padel Level",
+  "short_name": "Padel Level",
+  "description": "Scopri il tuo livello di gioco a padel",
+  "lang": "it",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#123f7c",
+  "theme_color": "#1d56a3",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}

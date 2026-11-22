@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Che livello sei a padel?</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1d56a3">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<style>
+:root{--bg:#f3f6f9;--card:#fff;--ink:#14263a;--mute:#5b6b7c;--court:#1d56a3;--ball:#d6e23a;--line:#d5dde6;--ok:#1d56a3;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1b2a;--card:#172638;--ink:#eaf0f6;--mute:#9fb0c1;--court:#6ea6ee;--line:#2a3d54;--ok:#6ea6ee}}
+:root[data-theme="dark"]{--bg:#0f1b2a;--card:#172638;--ink:#eaf0f6;--mute:#9fb0c1;--court:#6ea6ee;--line:#2a3d54;--ok:#6ea6ee}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 Georgia,"Times New Roman",serif}
+main{max-width:560px;margin:0 auto;padding:20px 18px 40px}
+h1{font:800 34px/1.1 "Trebuchet MS",Arial,sans-serif;margin:8px 0 10px;letter-spacing:-.5px}
+p{margin:0 0 14px;color:var(--mute)}
+.sans{font-family:"Trebuchet MS",Arial,sans-serif}
+button{font:700 17px "Trebuchet MS",Arial,sans-serif;cursor:pointer;border:0;border-radius:12px}
+.cta{background:var(--ball);color:#14263a;padding:15px 22px;width:100%}
+.cta:focus-visible,.opt:focus-visible{outline:3px solid var(--court);outline-offset:2px}
+.bar{height:6px;background:var(--line);border-radius:3px;margin:6px 0 22px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--court);transition:width .25s}
+.q{font:700 22px/1.25 "Trebuchet MS",Arial,sans-serif;margin:0 0 6px}
+.cat{color:var(--mute);font:15px "Trebuchet MS",Arial,sans-serif;margin-bottom:16px}
+.opt{display:block;width:100%;text-align:left;background:var(--card);color:var(--ink);border:2px solid var(--line);padding:14px 16px;margin-bottom:10px;font:400 16px/1.4 Georgia,serif;border-radius:12px}
+.opt:hover{border-color:var(--court)}
+.back{background:none;color:var(--mute);padding:10px 0;font-size:15px}
+.hide{display:none}
+.lvl{font:800 76px/1 "Trebuchet MS",Arial,sans-serif;color:var(--court);margin:6px 0 0}
+.name{font:700 22px "Trebuchet MS",Arial,sans-serif;margin:0 0 8px}
+.row{display:flex;justify-content:space-between;font:15px "Trebuchet MS",Arial,sans-serif;margin-top:12px}
+.row+.bar{margin:6px 0 4px}
+.tip{background:var(--card);border-left:5px solid var(--ball);padding:12px 14px;border-radius:8px;margin:20px 0;color:var(--ink)}
+.ghost{background:var(--card);color:var(--ink);border:2px solid var(--line);padding:13px 22px;width:100%}
+input{font:17px Georgia,serif;width:100%;padding:13px 14px;border:2px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);margin:6px 0 14px}input:focus-visible{outline:3px solid var(--court);outline-offset:2px}label{font:15px "Trebuchet MS",Arial,sans-serif;color:var(--mute)}
+svg.bg{position:fixed;inset:0;width:100%;height:100%;z-index:-1}
+.hero{display:flex;align-items:center;gap:12px;color:#fff;margin:4px 0 16px;font:800 28px "Trebuchet MS",Arial,sans-serif;text-shadow:0 2px 10px rgba(0,0,0,.45)}
+.hero small{display:block;font:400 15px Georgia,serif;opacity:.92}
+section{background:var(--card);border-radius:18px;padding:20px 18px;box-shadow:0 10px 30px rgba(0,0,0,.32)}
+.lst{margin:4px 0 16px}
+.lst div{display:flex;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:15px;line-height:1.35}
+.lst div:last-child{border-bottom:0}
+.lst b{flex:none;width:32px;height:32px;border-radius:50%;background:var(--ball);color:#14263a;display:grid;place-items:center;font:800 16px "Trebuchet MS",Arial,sans-serif}
+.lst strong{font-family:"Trebuchet MS",Arial,sans-serif;font-size:16px}
+.lst span{color:var(--mute)}
+.pl{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.pv{text-align:right}.pv b{font:800 26px "Trebuchet MS",Arial,sans-serif;color:var(--court);display:block;line-height:1}
+.m{color:var(--mute);font-size:14px}
+.vb{width:100%;display:flex;gap:8px}
+.vbtn{flex:1;background:var(--card);color:var(--ink);border:2px solid var(--line);padding:9px 8px;font-size:14px}
+.vbtn.on{background:var(--ball);color:#14263a;border-color:var(--ball)}
+</style>
+</head>
+<body>
+<svg class="bg" viewBox="0 0 200 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<defs><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".18"/><stop offset=".45" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#04122a" stop-opacity=".6"/></linearGradient></defs>
+<rect width="200" height="400" fill="#123f7c"/>
+<rect x="14" y="14" width="172" height="372" fill="#1d5fb0" stroke="#fff" stroke-width="2"/>
+<g stroke="#fff" stroke-width="1.6" fill="none"><line x1="14" y1="130" x2="186" y2="130"/><line x1="14" y1="270" x2="186" y2="270"/><line x1="100" y1="130" x2="100" y2="270"/></g>
+<line x1="6" y1="200" x2="194" y2="200" stroke="#e9f1fa" stroke-width="3" stroke-dasharray="2 1.5" opacity=".9"/>
+<rect x="3" y="3" width="194" height="394" fill="none" stroke="#a9d6ff" stroke-opacity=".4" stroke-width="6"/>
+<circle cx="150" cy="92" r="9" fill="#d6e23a"/><path d="M142 87c5 3 5 9 0 12M158 85c-5 3-5 9 0 12" stroke="#fff" stroke-width="1.4" fill="none"/>
+<rect width="200" height="400" fill="url(#sh)"/>
+</svg>
+<main>
+<header class="hero"><svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="20" fill="#d6e23a"/><path d="M6 12c9 7 9 17 0 24M38 8c-9 7-9 17 0 24" stroke="#fff" stroke-width="2.5" fill="none"/></svg><div>Padel Level<small>Scopri il tuo livello di gioco</small></div></header>
+<section id="start">
+<h1>Che livello sei a padel?</h1>
+<p>Il test serve per confermare il proprio livello presso il circolo dove si gioca, laddove richiesto.</p>
+<p>Rispondi a otto domande sul tuo gioco. Alla fine ricevi un livello da 1 a 6 e sai su cosa lavorare. Questi sono i possibili livelli:</p>
+<div class="lst">
+<div><b>1</b><div style="display:block;padding:0;border:0"><strong>Principiante</strong><br><span>Stai scoprendo il gioco</span></div></div>
+<div><b>2</b><div style="display:block;padding:0;border:0"><strong>Principiante avanzato</strong><br><span>Tieni lo scambio con regolarità</span></div></div>
+<div><b>3</b><div style="display:block;padding:0;border:0"><strong>Intermedio base</strong><br><span>Colpi solidi, il gioco in coppia cresce</span></div></div>
+<div><b>4</b><div style="display:block;padding:0;border:0"><strong>Intermedio pieno</strong><br><span>Costruisci il punto con costanza</span></div></div>
+<div><b>5</b><div style="display:block;padding:0;border:0"><strong>Intermedio avanzato</strong><br><span>Pochi errori, giochi con intenzione</span></div></div>
+<div><b>6</b><div style="display:block;padding:0;border:0"><strong>Pro</strong><br><span>Gioco completo da torneo</span></div></div>
+</div>
+<p>Rispondi in modo onesto: scegli ciò che fai nella maggior parte delle partite, non nei tuoi giorni migliori. Tattica e colpi pesano più dell'esperienza: chi gioca da anni non è per forza di livello alto.</p>
+<button class="cta" id="go">Inizia la valutazione</button>
+<button class="ghost" id="dblink" style="margin-top:10px">Banca dati dei giocatori</button>
+<button class="ghost" id="clublink" style="margin-top:10px">Classifica dei circoli</button>
+<button class="back" id="vlink" style="margin-top:8px">Verifica un certificato</button>
+</section>
+
+<section id="acc" class="hide">
+<h1 style="font-size:28px">Accedi</h1>
+<p>Serve un account gratuito per salvare il tuo livello, vedere la banca dati e votare.</p>
+<label for="aem">Email</label><input id="aem" type="email" autocomplete="email">
+<label for="apw">Password (almeno 6 caratteri)</label><input id="apw" type="password" autocomplete="current-password">
+<button class="cta" id="lgo">Accedi</button>
+<button class="ghost" id="lsg" style="margin-top:10px">Crea account</button>
+<p id="aout" style="margin-top:14px;color:var(--ink)"></p>
+<button class="back" id="aback">Indietro</button>
+</section>
+
+<section id="dbs" class="hide">
+<h1 style="font-size:28px">Banca dati</h1>
+<p>Giocatori valutati. Se conosci qualcuno puoi confermare o no il livello che ha ottenuto.</p>
+<input id="dbq" placeholder="Cerca per nome o circolo" aria-label="Cerca per nome o circolo">
+<p id="dbmsg">Caricamento...</p>
+<div id="dblist"></div>
+<button class="back" id="dbback">Indietro</button>
+<button class="back" id="out">Esci dall'account</button>
+</section>
+
+<section id="club" class="hide">
+<h1 style="font-size:28px">Classifica dei circoli</h1>
+<p>I circoli da cui arrivano più giocatori valutati.</p>
+<div id="clist"></div>
+<button class="back" id="cback">Indietro</button>
+</section>
+
+<section id="ver" class="hide">
+<h1 style="font-size:28px">Verifica un certificato</h1>
+<p>Inserisci il nome e il codice che trovi sul certificato.</p>
+<label for="vname">Nome</label><input id="vname" autocomplete="off">
+<label for="vcode">Codice di verifica</label><input id="vcode" autocomplete="off" autocapitalize="characters">
+<button class="cta" id="vgo">Verifica</button>
+<p id="vout" style="margin-top:14px;color:var(--ink)"></p>
+<button class="back" id="vback">Indietro</button>
+</section>
+
+<section id="quiz" class="hide">
+<div class="bar"><i id="prog"></i></div>
+<div class="cat" id="cat"></div>
+<h2 class="q" id="q"></h2>
+<div id="opts" style="margin-top:16px"></div>
+<button class="back" id="back">Indietro</button>
+</section>
+
+<section id="res" class="hide">
+<p class="sans" style="margin:0">Il tuo livello</p>
+<div class="lvl" id="lvl"></div>
+<div class="name" id="lname"></div>
+<p id="ldesc"></p>
+<div id="bars"></div>
+<div class="tip" id="tip"></div>
+<label for="pnome">Nome</label><input id="pnome" autocomplete="given-name" maxlength="30">
+<label for="pcogn">Cognome</label><input id="pcogn" autocomplete="family-name" maxlength="30">
+<label for="pcirc">Circolo di riferimento principale</label><input id="pcirc" maxlength="50">
+<p class="sans" style="font-size:14px">Se salvi il risultato nella banca dati, nome, cognome, circolo e livello saranno visibili agli altri utenti di questa pagina.</p>
+<button class="cta" id="sv" style="margin-bottom:10px">Salva nella banca dati</button>
+<button class="cta" id="dl" style="margin-bottom:10px">Scarica il certificato</button>
+<button class="ghost" id="share" style="margin-bottom:10px">Condividi il risultato</button>
+<button class="ghost" id="again">Rifai la valutazione</button>
+</section>
+</main>
+<script>
+var Q=[
+{c:"Esperienza",q:"Da quanto tempo giochi e con che frequenza?",o:["Meno di 6 mesi, gioco ogni tanto","Da 6 mesi a 2 anni, una volta a settimana","Da 2 a 4 anni, 2 o 3 volte a settimana","Più di 4 anni, gioco regolarmente anche in tornei"]},
+{c:"Colpi da fondo",q:"Come sono dritto e rovescio da fondo campo?",o:["Faccio fatica a mantenere lo scambio","Rimetto la palla, ma sbaglio spesso sotto pressione","Sono costante e riesco a variare altezza e direzione","Controllo profondità, effetti e ritmo a mia scelta"]},
+{c:"Vetri",q:"Cosa succede quando la palla rimbalza sui vetri?",o:["Di solito la perdo o la lascio passare","La gioco solo se è facile, spesso in difesa","Gioco bene i vetri di fondo e laterali","Uso il vetro anche per attaccare, con controbalzi e uscite"]},
+{c:"Servizio e risposta",q:"Come sono il tuo servizio e la tua risposta?",o:["Metto dentro il servizio con cautela, rispondo come capita","Servizio in sicurezza, rispondo con una palla alta","Servizio con una direzione precisa e rispondo a una zona scelta","Servizio con variazioni e la mia risposta mette in difficoltà gli avversari"]},
+{c:"Gioco a rete",q:"Come ti comporti a rete con volée e bloqueo?",o:["Evito la rete o sbaglio quasi tutto","Chiudo i punti facili, ma sbaglio le volée basse","Sono solido a rete e uso bene il bloqueo","Anticipo, piazzo la volée e chiudo con sicurezza"]},
+{c:"Colpi aerei",q:"Quali colpi sopra la testa riesci a fare?",o:["Nessuno in modo affidabile","Un colpo semplice per rimandare la palla","Bandeja e smash sono buoni, di solito controllati","Bandeja, víbora, smash anche in uscita dal vetro (x3, x4)"]},
+{c:"Tattica",q:"Come ti posizioni e giochi in coppia?",o:["Mi muovo senza uno schema preciso","So che la rete è la posizione migliore, ma non sempre la conquisto","Mi muovo insieme al compagno e cerco di prendere la rete","Leggo il gioco, costruisco il punto e adatto la tattica all'avversario"]},
+{c:"Fisico e costanza",q:"Come resisti a una partita lunga?",o:["Calo presto e faccio molti errori","Reggo un set, poi la qualità cala","Reggo l'intera partita con poche cadute","Resto lucido e veloce fino all'ultimo punto"]}
+];
+var W=[1,1.5,1.5,1,1.5,1.5,2,1],last="",A=[],i=0,$=function(x){return document.getElementById(x)};
+function show(id){["start","quiz","res","ver","dbs","club","acc"].forEach(function(s){$(s).classList.toggle("hide",s!==id)});window.scrollTo(0,0)}
+function render(){
+ var q=Q[i];$("cat").textContent="Domanda "+(i+1)+" di "+Q.length+" · "+q.c;
+ $("q").textContent=q.q;$("prog").style.width=(i/Q.length*100)+"%";
+ var h=$("opts");h.innerHTML="";
+ q.o.forEach(function(t,k){var b=document.createElement("button");b.className="opt";b.textContent=t;
+  b.onclick=function(){A[i]=k;i++;i<Q.length?render():result()};h.appendChild(b)});
+ $("back").style.visibility=i?"visible":"hidden";
+}
+var L=[
+[1,"Principiante","Stai scoprendo il gioco. Obiettivo: tenere lo scambio e imparare le regole di base."],
+[2,"Principiante avanzato","Rimetti la palla con regolarità. Ora servono controllo e posizione in campo."],
+[3,"Intermedio base","Hai colpi di base solidi e inizi a capire il gioco in coppia. Lavora su vetri e volée."],
+[4,"Intermedio pieno","Sei costante e costruisci il punto. Cura bandeja, tattica e variazioni."],
+[5,"Intermedio avanzato","Giochi con intenzione e fai pochi errori. Servono ritmo, effetti e letture."],
+[6,"Pro","Gioco completo in ogni zona del campo, con potenza, controllo e tattica da torneo."]];
+function result(){
+ var t=0,max=0;A.forEach(function(v,k){t+=v*W[k];max+=3*W[k]});
+ var lv=Math.round((1+t/max*5)*10)/10,lo=Math.min(6,Math.max(1,Math.round(lv))),info=L[lo-1];
+ last="Il mio livello a padel: "+lv.toFixed(1)+" ("+info[1]+").";$("lvl").textContent=lv.toFixed(1);$("lname").textContent=info[1];$("ldesc").textContent=info[2];
+ var b=$("bars");b.innerHTML="";
+ Q.forEach(function(q,k){var r=document.createElement("div");
+  r.innerHTML='<div class="row"><span>'+q.c+'</span><span>'+A[k]+'/3</span></div><div class="bar"><i style="width:'+(A[k]/3*100)+'%"></i></div>';b.appendChild(r)});
+ var w=0;A.forEach(function(v,k){if(v<A[w])w=k});
+ $("tip").innerHTML="<strong class='sans'>Da cui partire:</strong> "+Q[w].c.toLowerCase()+". È il punto più basso del tuo profilo, quindi è dove migliori più in fretta.";
+ show("res");
+}
+$("go").onclick=function(){A=[];i=0;show("quiz");render()};
+$("back").onclick=function(){if(i>0){i--;render()}};
+$("share").onclick=function(){var m=last+" Scopri il tuo livello: "+location.href;try{if(navigator.share){navigator.share({text:m}).catch(function(){});return}}catch(e){}try{navigator.clipboard.writeText(m).then(function(){$("share").textContent="Copiato negli appunti"})}catch(e){$("share").textContent="Copia non disponibile"}};
+$("again").onclick=function(){show("start")};
+function calc(a){var t=0,m=0;a.forEach(function(v,k){t+=v*W[k];m+=3*W[k]});return Math.round((1+t/m*5)*10)/10}
+function lname(lv){return L[Math.min(6,Math.max(1,Math.round(lv)))-1][1]}
+function sha(s){return crypto.subtle.digest("SHA-256",new TextEncoder().encode(s)).then(function(b){return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0")}).join("").slice(0,8).toUpperCase()})}
+function today(){var d=new Date();return d.getFullYear()+("0"+(d.getMonth()+1)).slice(-2)+("0"+d.getDate()).slice(-2)}
+function mk(n,a,d){var s=a.join("");return sha("padel|"+n.trim().toLowerCase()+"|"+s+"|"+d).then(function(h){return "PAD-"+s+"-"+d+"-"+h})}
+$("dl").onclick=function(){
+ var n=fname();if(!n){$("pnome").focus();return}
+ var d=today(),lv=calc(A);
+ mk(n,A,d).then(function(code){
+  var c=document.createElement("canvas");c.width=900;c.height=1200;var x=c.getContext("2d");
+  x.fillStyle="#f3f6f9";x.fillRect(0,0,900,1200);
+  x.strokeStyle="#1d56a3";x.lineWidth=10;x.strokeRect(30,30,840,1140);x.lineWidth=2;x.strokeRect(50,50,800,1100);
+  x.textAlign="center";x.fillStyle="#14263a";
+  x.font="bold 44px Trebuchet MS,Arial,sans-serif";x.fillText("Certificato di livello Padel",450,150);
+  x.font="26px Georgia,serif";x.fillStyle="#5b6b7c";x.fillText("rilasciato a",450,215);
+  x.fillStyle="#14263a";x.font="bold 54px Trebuchet MS,Arial,sans-serif";x.fillText(n,450,285);
+  x.fillStyle="#1d56a3";x.font="bold 190px Trebuchet MS,Arial,sans-serif";x.fillText(lv.toFixed(1),450,490);
+  x.fillStyle="#14263a";x.font="bold 40px Trebuchet MS,Arial,sans-serif";x.fillText(lname(lv),450,550);
+  Q.forEach(function(q,k){var y=620+k*48;x.textAlign="left";x.font="22px Trebuchet MS,Arial,sans-serif";x.fillStyle="#14263a";x.fillText(q.c,110,y);x.fillStyle="#d5dde6";x.fillRect(380,y-16,360,14);x.fillStyle="#1d56a3";x.fillRect(380,y-16,360*A[k]/3,14)});
+  x.save();x.translate(730,1040);x.rotate(-0.21);x.strokeStyle="#1d56a3";x.lineWidth=6;x.beginPath();x.arc(0,0,92,0,7);x.stroke();x.lineWidth=2;x.beginPath();x.arc(0,0,80,0,7);x.stroke();
+  x.fillStyle="#d6e23a";x.beginPath();x.arc(0,-30,22,0,7);x.fill();x.stroke();
+  x.textAlign="center";x.fillStyle="#1d56a3";x.font="bold 19px Trebuchet MS,Arial,sans-serif";x.fillText("SIGILLO DIGITALE",0,18);x.font="16px Trebuchet MS,Arial,sans-serif";x.fillText(d.slice(6)+"/"+d.slice(4,6)+"/"+d.slice(0,4),0,42);x.fillText(code.slice(-8),0,62);x.restore();
+  x.textAlign="left";x.fillStyle="#14263a";x.font="bold 22px Trebuchet MS,Arial,sans-serif";x.fillText("Codice di verifica",110,1000);x.font="24px Courier New,monospace";x.fillText(code,110,1034);
+  x.fillStyle="#5b6b7c";x.font="18px Georgia,serif";x.fillText("Autovalutazione tramite questionario. Il codice",110,1080);x.fillText("conferma che nome, risposte e data non sono stati",110,1104);x.fillText("modificati. Non è un test ufficiale.",110,1128);
+  c.toBlob(function(b){var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="certificato-padel-"+n.replace(/\s+/g,"-").toLowerCase()+".png";document.body.appendChild(a);a.click();a.remove()},"image/png")
+ })};
+$("vgo").onclick=function(){var n=$("vname").value.trim(),c=$("vcode").value.trim().toUpperCase(),o=$("vout"),m=c.match(/^PAD-([0-3]{8})-(\d{8})-([0-9A-F]{8})$/);
+ if(!n||!m){o.textContent="Inserisci nome e codice nel formato PAD-xxxxxxxx-aaaammgg-xxxxxxxx.";return}
+ var a=m[1].split("").map(Number);
+ mk(n,a,m[2]).then(function(r){var lv=calc(a);o.textContent=r===c?"Codice valido: "+n+", livello "+lv.toFixed(1)+" ("+lname(lv)+"), emesso il "+m[2].slice(6)+"/"+m[2].slice(4,6)+"/"+m[2].slice(0,4)+".":"Codice non valido: nome o dati non corrispondono."})};
+$("vlink").onclick=function(){show("ver")};
+$("vback").onclick=function(){show("start")};
+var SB=supabase.createClient("https://hmgpvcdfqpnwfmlntkbc.supabase.co","sb_publishable_di4y0khXbRGqASb5Z8vONg_BgPs10wo"),UID=null,PL=[],VT=[],AFTER=null;
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function fname(){return($("pnome").value.trim()+" "+$("pcogn").value.trim()).trim()}
+function ckey(s){return String(s).trim().toLowerCase().replace(/\s+/g," ")}
+function need(fn,back){if(UID){fn();return}AFTER=function(){if(back)show(back);fn()};show("acc")}
+function load(){if(!UID)return;
+ Promise.all([SB.from("players").select("*").order("created_at",{ascending:false}),SB.from("votes").select("*")]).then(function(r){
+  if(r[0].error){$("dbmsg").textContent="Banca dati non raggiungibile.";return}
+  PL=r[0].data||[];VT=r[1].data||[];rdb();rclub()}).catch(function(){$("dbmsg").textContent="Banca dati non raggiungibile."})}
+SB.auth.onAuthStateChange(function(ev,s){UID=s&&s.user?s.user.id:null;if(UID)load()});
+function vote(pid,v){
+ var q=v?SB.from("votes").upsert({player_id:pid,voter_id:UID,v:v},{onConflict:"player_id,voter_id"}):SB.from("votes").delete().eq("player_id",pid).eq("voter_id",UID);
+ q.then(function(r){if(r.error)$("dbmsg").textContent="Voto non registrato.";load()})}
+function rdb(){
+ var q=ckey($("dbq").value),h=$("dblist");h.innerHTML="";
+ var list=PL.filter(function(p){return !q||ckey(p.nome+" "+p.cognome+" "+p.circolo).indexOf(q)>-1});
+ $("dbmsg").textContent=list.length?"":(PL.length?"Nessun giocatore trovato.":"Nessun giocatore ancora. Sii il primo a farti valutare.");
+ list.forEach(function(p){
+  var up=0,dn=0,my=0;VT.forEach(function(x){if(x.player_id!==p.id)return;if(x.v===1)up++;if(x.v===-1)dn++;if(x.voter_id===UID)my=x.v});
+  var el=document.createElement("div");el.className="pl";
+  el.innerHTML='<div class="sans"><strong>'+esc(p.nome)+' '+esc(p.cognome)+'</strong><br><span class="m">'+esc(p.circolo)+'</span></div><div class="pv"><b>'+Number(p.livello).toFixed(1)+'</b><span class="m">'+esc(p.livello_nome)+'</span></div>';
+  var bt=document.createElement("div");bt.className="vb";
+  if(p.user_id===UID){bt.className="m";bt.textContent="Il tuo risultato: "+up+" conferme, "+dn+" non conferme"}
+  else{[[1,"Confermo",up],[-1,"Non confermo",dn]].forEach(function(a){var b=document.createElement("button");b.className="vbtn"+(my===a[0]?" on":"");b.textContent=a[1]+" \u00b7 "+a[2];b.onclick=function(){vote(p.id,my===a[0]?0:a[0])};bt.appendChild(b)})}
+  el.appendChild(bt);h.appendChild(el)})}
+function rclub(){
+ var m={};PL.forEach(function(p){var k=p.circolo_key;(m[k]=m[k]||{n:p.circolo,c:0}).c++});
+ var a=Object.keys(m).map(function(k){return m[k]}).sort(function(x,y){return y.c-x.c}),h=$("clist");h.innerHTML="";
+ if(!a.length){h.innerHTML="<p>Nessun circolo ancora.</p>";return}
+ a.forEach(function(c,i){var d=document.createElement("div");d.className="pl";d.innerHTML='<div class="sans"><strong>'+(i+1)+'. '+esc(c.n)+'</strong></div><div class="pv"><b>'+c.c+'</b><span class="m">'+(c.c===1?"giocatore":"giocatori")+'</span></div>';h.appendChild(d)})}
+function auth(sign){
+ var e=$("aem").value.trim(),p=$("apw").value,o=$("aout");
+ if(!e||p.length<6){o.textContent="Inserisci email e una password di almeno 6 caratteri.";return}
+ o.textContent="Un attimo...";
+ (sign?SB.auth.signUp({email:e,password:p}):SB.auth.signInWithPassword({email:e,password:p})).then(function(r){
+  if(r.error){o.textContent="Operazione non riuscita: "+r.error.message;return}
+  if(!r.data.session){o.textContent="Controlla la tua email per confermare l'account, poi accedi.";return}
+  UID=r.data.session.user.id;o.textContent="";load();
+  var f=AFTER;AFTER=null;if(f){f()}else{show("start")}})}
+$("lgo").onclick=function(){auth(false)};
+$("lsg").onclick=function(){auth(true)};
+$("aback").onclick=function(){AFTER=null;show("start")};
+$("out").onclick=function(){SB.auth.signOut();UID=null;PL=[];VT=[];show("start")};
+$("sv").onclick=function(){
+ var no=$("pnome").value.trim(),co=$("pcogn").value.trim(),ci=$("pcirc").value.trim(),b=$("sv");
+ if(!no||!co||!ci){(!no?$("pnome"):!co?$("pcogn"):$("pcirc")).focus();b.textContent="Compila nome, cognome e circolo";return}
+ need(function(){var lv=calc(A);b.textContent="Salvataggio...";
+  SB.from("players").upsert({user_id:UID,nome:no,cognome:co,circolo:ci,circolo_key:ckey(ci),livello:lv,livello_nome:lname(lv)},{onConflict:"user_id"}).then(function(r){
+   b.textContent=r.error?"Salvataggio non riuscito, riprova":"Salvato: ora gli amici possono confermare";load()})},"res")};
+$("dblink").onclick=function(){need(function(){show("dbs");load()})};
+$("clublink").onclick=function(){need(function(){show("club");load()})};
+$("dbback").onclick=function(){show("start")};
+$("cback").onclick=function(){show("start")};
+$("dbq").oninput=rdb;
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(function(){});
+</script>
+</body>
+</html>
